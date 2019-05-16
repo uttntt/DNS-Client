@@ -11,17 +11,17 @@ class DNSClient:
     '''
 
 
-    def __init__(self, server='8.8.8.8'):
+    def __init__(self, server='8.8.8.8', port=53):
         self.socket = socket.socket(socket.AF_INET, 
             socket.SOCK_DGRAM)
         self.socket.settimeout(5)
-        self.connect_server(server)
+        self.connect_server(server, port)
 
-    def connect_server(self, server):
+    def connect_server(self, server, port):
         '''connection
         '''
         try:
-            self.socket.connect((server, 53))
+            self.socket.connect((server, port))
         except Exception:
             print('Unable to connect to server {0}'.format(server))
             return False
@@ -43,7 +43,7 @@ class DNSClient:
         format.decode(responce)
 
         if debug_mode:
-            print('#################  RESPONCE from {0} ' \
+            print('#################  RESPONSE from {0} ' \
                 ' ##################'.format(self.server))
             format.print()
         
@@ -67,6 +67,29 @@ class DNSClient:
 
 
 if __name__ == '__main__':
-    client = DNSClient(server='8.8.8.8')
-    client.send_query('vk.com', recursion_desired=False, debug_mode=False)
+    #client = DNSClient(server='8.8.8.8', port=53)
+    # ok
+    #client.send_query('www.google.com', recursion_desired=False, debug_mode=True, IPv6=False) 
+    # ok
+    #client.send_query('www.google.com', recursion_desired=False, debug_mode=True, IPv6=True) 
+    # ok
+    #client.send_query('vk.com', recursion_desired=False, debug_mode=True, IPv6=False)
+    # not ok, instead of AAAA, soa type response reaturn
+    #client.send_query('vk.com', recursion_desired=False, debug_mode=True, IPv6=True)
+
+    client = DNSClient(server='172.16.33.52', port=10053)
+    #client.send_query('gslb.com', recursion_desired=False, debug_mode=True, IPv6=False)
+    #client.send_query('gslb.com', recursion_desired=False, debug_mode=True, IPv6=True)
+
+    #client.send_query('glb.com', recursion_desired=False, debug_mode=True, IPv6=False)
+    #client.send_query('glb.com', recursion_desired=False, debug_mode=True, IPv6=True)
+
+    #client.send_query('www.otvlive.com', recursion_desired=False, debug_mode=True, IPv6=False)
+    #client.send_query('www.otvlive.com', recursion_desired=False, debug_mode=True, IPv6=True)
+
+    #client.send_query('www.aa.com', recursion_desired=False, debug_mode=True, IPv6=True)
+    client.send_query('www.otm5g.com', recursion_desired=False, debug_mode=True, IPv6=True)
+    #client.send_query('www.ktbomlive.com', recursion_desired=False, debug_mode=True, IPv6=True)
+
     client.disconnect()
+
